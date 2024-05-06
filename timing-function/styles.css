@@ -16,7 +16,7 @@ body {
   width: 10px;
   height: 50px;
   background-color: greenyellow;
-  transition: left 2s steps(2, jump-both);
+  transition: left 2s steps(4, jump-none);
   left: -5px;
   position: absolute;
 }
