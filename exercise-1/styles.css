@@ -10,6 +10,10 @@ body {
   box-sizing: border-box;
 }
 
+:root {
+  --duration: 12s;
+}
+
 .sky {
   background-image: linear-gradient(rgb(97, 191, 228), rgb(204, 233, 245));
   height: 50vh;
@@ -37,6 +41,7 @@ body {
   position: absolute;
   width: 200vw;
   height: 100%;
+  animation: var(--duration) linear infinite moveStreet;
 }
 .ground .street .lines {
   position: absolute;
@@ -60,10 +65,11 @@ body {
   margin: auto;
   background-image: url("./assets/7888220.png");
   background-size: calc(var(--char-width) * 8);
-  background-position: calc(var(--char-width) * -4) 0px;
+  background-position: calc(var(--char-width) * -5) 0px;
   background-repeat: no-repeat;
   width: var(--char-width);
   aspect-ratio: 0.535;
+  animation: 1s infinite run steps(8, jump-none);
 }
 
 .background {
@@ -89,4 +95,22 @@ body {
   height: 90%;
   bottom: 0px;
   left: 0;
+}
+
+@keyframes run {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: calc(var(--char-width) * -7);
+  }
+}
+
+@keyframes moveStreet {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
