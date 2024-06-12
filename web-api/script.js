@@ -51,6 +51,33 @@ document.addEventListener("DOMContentLoaded", () => {
       if (button.classList.contains("finish")) {
         squareAnimation.finish();
       }
+      if (button.classList.contains("changeAnimation")) {
+        squareAnimation.effect.setKeyframes([
+          {
+            transform: "translateY(0)",
+          },
+          {
+            backgroundColor: "greenyellow",
+            offset: 0.8,
+          },
+          {
+            transform: "translateY(calc(100vh - 100px)) rotate(360deg)",
+            backgroundColor: "purple",
+          },
+        ]);
+      }
+      if (button.classList.contains("loginfo")) {
+        console.log("currentTime", squareAnimation.currentTime);
+        console.log("startTime", squareAnimation.startTime);
+        console.log("playbackRate", squareAnimation.playbackRate);
+        console.log("playState", squareAnimation.playState);
+        console.log("KeyFrames", squareAnimation.effect.getKeyframes());
+        console.log("Timing", squareAnimation.effect.getTiming());
+        console.log(
+          "ComputedTiming",
+          squareAnimation.effect.getComputedTiming()
+        );
+      }
     });
 
     /** @type {HTMLInputElement} */
@@ -61,6 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
       "playbackRateInputValue"
     );
 
+    playbackRateInput.value = squareAnimation.playbackRate;
+    playbackRateInputValue.value = squareAnimation.playbackRate;
     playbackRateInput.addEventListener("input", (e) => {
       if (!(e.target instanceof HTMLInputElement)) return;
       squareAnimation.updatePlaybackRate(e.target.value);
@@ -70,4 +99,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /** @type {HTMLInputElement} */
   const durationInput = document.getElementById("durationInput");
+
+  /** @type {HTMLOutputElement} */
+  const durationInputValue = document.getElementById("durationInputValue");
+
+  durationInput.value = squareAnimation.effect.getComputedTiming().duration;
+  durationInputValue.value =
+    squareAnimation.effect.getComputedTiming().duration;
+
+  durationInput.addEventListener("input", (e) => {
+    if (!(e.target instanceof HTMLInputElement)) return;
+    squareAnimation.effect.updateTiming({
+      duration: parseInt(e.target.value),
+    });
+    durationInputValue.value = e.target.value;
+  });
+
+  /** @type {HTMLInputElement} */
+  const infiniteInput = document.getElementById("infiniteInput");
+
+  infiniteInput.checked =
+    squareAnimation.effect.getComputedTiming().iterations === Infinity;
+
+  infiniteInput.addEventListener("change", (e) => {
+    if (!(e.target instanceof HTMLInputElement)) return;
+    squareAnimation.effect.updateTiming({
+      iterations: e.target.checked ? Infinity : 2,
+    });
+  });
 });
