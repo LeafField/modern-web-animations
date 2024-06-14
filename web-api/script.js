@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   /** @type {HTMLDivElement}  */
   const element = document.querySelector(".square");
   const squareAnimation = element.animate(
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       delay: 1000,
       direction: "alternate",
       fill: "both",
-      iterations: Infinity,
+      iterations: 2,
       easing: "linear",
       composite: "add",
       iterationComposite: "accumulate",
@@ -38,12 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       if (button.classList.contains("play")) {
         squareAnimation.play();
+        squareAnimation.ready.then(() => {
+          console.log("playState after play", squareAnimation.playState);
+        });
       }
       if (button.classList.contains("pause")) {
         squareAnimation.pause();
+        squareAnimation.ready.then(() => {
+          console.log("playState after pause", squareAnimation.playState);
+        });
       }
       if (button.classList.contains("cancel")) {
         squareAnimation.cancel();
+        squareAnimation.ready.then(() => {
+          console.log("playState after cancel", squareAnimation.playState);
+        });
       }
       if (button.classList.contains("reverse")) {
         squareAnimation.reverse();
@@ -126,5 +135,44 @@ document.addEventListener("DOMContentLoaded", () => {
     squareAnimation.effect.updateTiming({
       iterations: e.target.checked ? Infinity : 2,
     });
+  });
+
+  /** @type {HTMLInputElement} */
+  const currentTimeInput = document.getElementById("currentTimeInput");
+  currentTimeInput.value = squareAnimation.currentTime;
+  currentTimeInput.addEventListener("input", (e) => {
+    if (e.target instanceof HTMLInputElement) {
+      squareAnimation.currentTime = e.target.value;
+    }
+  });
+
+  /** @type {HTMLInputElement} */
+  const startTimeInput = document.getElementById("startTimeInput");
+  startTimeInput.value = squareAnimation.startTime;
+  startTimeInput.addEventListener("input", (e) => {
+    if (e.target instanceof HTMLInputElement) {
+      squareAnimation.startTime = e.target.value;
+    }
+  });
+
+  squareAnimation.pause();
+  console.log("playState after pause:", squareAnimation.playState);
+  console.log("pending after pause:", squareAnimation.pending);
+
+  squareAnimation.ready.then(() => {
+    console.log("Animation ready");
+    console.log("playState after ready:", squareAnimation.playState);
+    console.log("pending after ready:", squareAnimation.pending);
+  });
+
+  squareAnimation.play();
+  console.log("playState after play:", squareAnimation.playState);
+  console.log("pending after play:", squareAnimation.pending);
+
+  squareAnimation.addEventListener("finish", (e) => {
+    console.log(e);
+  });
+  squareAnimation.addEventListener("cancel", (e) => {
+    console.log(e);
   });
 });
