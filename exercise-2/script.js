@@ -76,7 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   async function jump() {
-    if (character.getAnimations().find((animation) => animation.id === "jump"))
+    if (
+      streetAnimation.playState !== "running" ||
+      character.getAnimations().find((animation) => animation.id === "jump")
+    )
       return;
     characterAnimation.pause();
     character.classList.add("jump");
@@ -98,10 +101,53 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+    const { duration, iterations, direction, easing } =
+      jumpAnimation.effect.getComputedTiming();
+    document.querySelector(".shadow").animate(
+      [
+        {
+          transform: "scale(1)",
+        },
+        {
+          transform: "scale(1.15)",
+        },
+      ],
+      { duration, iterations, direction, easing }
+    );
     await jumpAnimation.finished;
     characterAnimation.play();
     character.classList.remove("jump");
   }
+
+  function togglePlayState() {
+    document.getAnimations().forEach((animation) => {
+      if (animation.playState === "running") {
+        animation.pause();
+      } else {
+        animation.play();
+      }
+    });
+  }
+
+  function runFaster() {
+    if (streetAnimation.playbackRate >= 3) return;
+    document.getAnimations().forEach((animation) => {
+      animation.playbackRate *= 1.1;
+    });
+  }
+
+  function runSlower() {
+    if (streetAnimation.playbackRate <= 0.8) return;
+    document.getAnimations().forEach((animation) => {
+      animation.playbackRate *= 0.9;
+    });
+  }
+
+  setInterval(() => {
+    if (streetAnimation.playState === "running") {
+      runSlower();
+    }
+  }, 5000);
 
   document.addEventListener("keyup", (event) => {
     switch (event.code) {
@@ -109,10 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
         jump();
         break;
       case "ArrowRight":
+        runFaster();
         break;
       case "ArrowLeft":
+        runSlower();
         break;
       case "Space":
+        togglePlayState();
         break;
 
       default:
