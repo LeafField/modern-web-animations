@@ -5,28 +5,12 @@ body {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   padding: 0;
   margin: 0;
-  timeline-scope: --container-timeline;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 
 .container {
-  height: 50vh;
+  height: 100vh;
   overflow: auto;
   background-color: #100e1e;
-  animation: cangeBg both;
-  animation-timeline: --container-2;
-  scroll-timeline: --container-timeline block;
-  flex: 1;
-}
-.container-2 {
-  height: 50vh;
-  overflow: auto;
-  background-color: #487c55;
-  flex: 1;
-  scroll-timeline: --container-2;
 }
 
 .content {
@@ -35,24 +19,37 @@ body {
   margin: 0 auto;
 }
 
-.square {
-  width: 100px;
-  height: 100px;
-  background-color: gold;
-  animation: linear move both;
-  animation-timeline: --container-2;
-  position: sticky;
+.progress {
+  width: 100%;
+  /* height: 100px; */
+  height: 150vh;
+  background-color: rgb(57, 41, 67);
+  position: relative;
+  margin: 20px 0;
+}
+.progress-inner {
+  position: absolute;
+  height: 100%;
   top: 0;
+  left: 0;
+  background-color: rgb(209, 90, 213);
+  animation: animateWidth linear both;
+  animation-timeline: view(20%);
+  animation-range-start: cover;
+  animation-range-end: cover;
 }
 
-@keyframes move {
-  to {
-    transform: translateX(calc(50vw - 100px));
+@keyframes animateWidth {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
   }
 }
 
-@keyframes cangeBg {
+@keyframes changeBg {
   to {
-    background-color: rgb(73, 46, 148);
+    background-color: black;
   }
 }
