@@ -11,6 +11,9 @@ body {
   height: 100vh;
   overflow: auto;
   background-color: #100e1e;
+  flex: 1;
+  border: 2px solid gold;
+  box-sizing: border-box;
 }
 
 .content {
@@ -21,8 +24,8 @@ body {
 
 .progress {
   width: 100%;
-  /* height: 100px; */
-  height: 150vh;
+  height: 100px;
+  /* height: 150vh; */
   background-color: rgb(57, 41, 67);
   position: relative;
   margin: 20px 0;
@@ -33,23 +36,4 @@ body {
   top: 0;
   left: 0;
   background-color: rgb(209, 90, 213);
-  animation: animateWidth linear both;
-  animation-timeline: view(20%);
-  animation-range-start: cover;
-  animation-range-end: cover;
-}
-
-@keyframes animateWidth {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
-}
-
-@keyframes changeBg {
-  to {
-    background-color: black;
-  }
 }
