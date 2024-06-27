@@ -38,6 +38,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 100;
+  view-transition-name: header;
 }
 .header .header-inner {
   height: var(--header-height);
@@ -48,6 +49,10 @@ img {
 }
 .header.expanded .header-inner {
   justify-content: flex-start;
+}
+
+.header .title {
+  view-transition-name: header-title;
 }
 
 .header .title h1 {
@@ -76,6 +81,7 @@ img {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 20px;
+  /* view-transition-name: grid; */
 }
 
 .grid .grid-item {
@@ -157,3 +163,55 @@ img {
   line-height: 1.8;
   margin-top: 40px;
 }
+
+@keyframes slideOut {
+  to {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+::view-transition-old(root) {
+  animation: 0.5s both ease-in-out slideOut;
+}
+
+::view-transition-new(root) {
+  animation: 0.5s both ease-in-out slideIn;
+}
+
+::view-transition-old(header),
+::view-transition-new(header) {
+  animation: none;
+}
+
+::view-transition-old(image),
+::view-transition-new(image) {
+  animation: none;
+  mix-blend-mode: normal;
+  height: 100%;
+  overflow: hidden;
+}
+
+::view-transition-new(image) {
+  object-fit: cover;
+}
+
+/* ::view-transition-old(grid),
+::view-transition-new(grid) {
+  animation: none;
+} */
+
+/* ::view-transition-group(header-title) {
+  animation-duration: 5s;
+} */

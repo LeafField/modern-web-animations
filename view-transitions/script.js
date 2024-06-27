@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  /** @type {HTMLDivElement} */
   const grid = document.querySelector(".grid");
   const header = document.querySelector(".header");
   const gridOuter = document.querySelector(".grid-outer");
@@ -18,10 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll(".active")
       .forEach((e) => e.classList.remove("active"));
     item.classList.add("active");
+    grid.style.viewTransitionName = "grid";
   }
 
   function displayGrid() {
     document.documentElement.scrollTop = 0;
+    grid.style.viewTransitionName = "none";
     gridButton.style.display = "none";
     gridOuter.classList.remove("expanded");
     header.classList.remove("expanded");
@@ -31,12 +34,40 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   grid.addEventListener("click", async (e) => {
+    /** @type {HTMLDivElement} */
     const item = e.target.closest(".grid-item");
     if (!item || item.classList.contains("active")) return;
-    expandImage(item);
+    if (!document.startViewTransition) {
+      expandImage(item);
+      return;
+    }
+
+    /** @type {HTMLImageElement} */
+    const thumbnail = item.querySelector("img");
+
+    /** @type {HTMLImageElement} */
+    const largeImage = main.querySelector("img");
+
+    thumbnail.style.viewTransitionName = "image";
+    largeImage.style.viewTransitionName = "none";
+
+    const transition = document.startViewTransition(() => {
+      thumbnail.style.viewTransitionName = "none";
+      largeImage.style.viewTransitionName = "image";
+      expandImage(item);
+    });
+
+    await transition.updateCallbackDone;
+    item.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
-  
+
   gridButton.addEventListener("click", async (e) => {
-    displayGrid();
+    if (!document.startViewTransition) {
+      displayGrid();
+      return;
+    }
+    document.startViewTransition(() => {
+      displayGrid();
+    });
   });
 });
